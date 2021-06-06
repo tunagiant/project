@@ -65,7 +65,7 @@
 
 
 
-####**resource
+#### **resource
 + /mapper				mapper 바인딩
 
 + /static				라이브러리, 플러그인 처리
