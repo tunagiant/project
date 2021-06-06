@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--파일첨부-->
+<mapper namespace="com.hotae.mapper.AttachMapper">
+
+    <!--공통쿼리1:컬럼-->
+    <sql id="attachColumns">
+		  idx
+		, board_idx
+		, original_name
+		, save_name
+		, size
+		, delete_yn
+		, insert_time
+		, delete_time
+	</sql>
+
+    <!--1.파일등록-->
+    <insert id="insertAttach" parameterType="list">
+        INSERT INTO tb_attach (
+        <include refid="attachColumns" />
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.idx}
+            , #{item.boardIdx}
+            , #{item.originalName}
+            , #{item.saveName}
+            , #{item.size}
+            , 'N'
+            , NOW()
+            , NULL
+            )
+        </foreach>
+    </insert>
+
+    <!--2.파일상세조회-->
+    <select id="selectAttachDetail" parameterType="long" resultType="AttachDTO">
+        SELECT
+        <include refid="attachColumns" />
+        FROM
+        tb_attach
+        WHERE
+        delete_yn = 'N'
+        AND
+        idx = #{idx}
+    </select>
+
+    <!--3.파일삭제-->
+    <update id="deleteAttach" parameterType="long">
+		UPDATE tb_attach
+		SET
+			  delete_yn = 'Y'
+			, delete_time = NOW()
+		WHERE
+			board_idx = #{boardIdx}
+	</update>
+
+    <!--3-1.파일삭제취소-->
+    <update id="undeleteAttach" parameterType="list">
+    UPDATE tb_attach
+    SET
+    delete_yn = 'N'
+    WHERE
+    idx IN
+    <foreach collection="list" item="item" separator="," open="(" close=")">
+        #{item}
+    </foreach>
+</update>
+
+    <!--4.파일목록조회-->
+    <select id="selectAttachList" parameterType="long" resultType="AttachDTO">
+        SELECT
+        <include refid="attachColumns" />
+        FROM
+        tb_attach
+        WHERE
+        delete_yn = 'N'
+        AND
+        board_idx = #{boardIdx}
+    </select>
+
+    <!--5.첨부파일갯수-->
+    <select id="selectAttachTotalCount" parameterType="long" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_attach
+		WHERE
+			delete_yn = 'N'
+		AND
+			board_idx = #{boardIdx}
+	</select>
+
+
+
+</mapper>

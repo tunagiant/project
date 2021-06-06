@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--댓글-->
+<mapper namespace="com.hotae.mapper.CommentMapper">
+
+    <!--공통쿼리1:컬럼-->
+    <sql id="commentColumns">
+		  idx
+		, board_idx
+		, content
+		, writer
+		, delete_yn
+		, insert_time
+		, update_time
+		, delete_time
+	</sql>
+
+    <!--1.댓글등록-->
+    <insert id="insertComment" parameterType="CommentDTO">
+        INSERT INTO tb_comment (
+        <include refid="commentColumns" />
+        ) VALUES (
+        #{idx}
+        , #{boardIdx}
+        , #{content}
+        , #{writer}
+        , IFNULL(#{deleteYn}, 'N')
+        , NOW()
+        , NULL
+        , NULL
+        )
+    </insert>
+
+    <!--2.댓글상세조회-->
+    <select id="selectCommentDetail" parameterType="long" resultType="CommentDTO">
+        SELECT
+        <include refid="commentColumns" />
+        FROM
+        tb_comment
+        WHERE
+        delete_yn = 'N'
+        AND
+        idx = #{idx}
+    </select>
+
+    <!--3.댓글수정-->
+    <update id="updateComment" parameterType="CommentDTO">
+		UPDATE tb_comment
+		SET
+			  update_time = NOW()
+			, content = #{content}
+			, writer = #{writer}
+		WHERE
+			idx = #{idx}
+	</update>
+
+    <!--4.댓글삭제-->
+    <update id="deleteComment" parameterType="long">
+		UPDATE tb_comment
+		SET
+			  delete_yn = 'Y'
+			, delete_time = NOW()
+		WHERE
+			idx = #{idx}
+	</update>
+
+    <!--5.댓글목록조회-->
+    <select id="selectCommentList" parameterType="CommentDTO" resultType="CommentDTO">
+        SELECT
+        <include refid="commentColumns" />
+        FROM
+        tb_comment
+        WHERE
+        delete_yn = 'N'
+        AND
+        board_idx = #{boardIdx}
+        ORDER BY
+        idx DESC,
+        insert_time DESC
+    </select>
+
+    <!--6.댓글전체갯수-->
+    <select id="selectCommentTotalCount" parameterType="CommentDTO" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tb_comment
+		WHERE
+			delete_yn = 'N'
+		AND
+			board_idx = #{boardIdx}
+	</select>
+
+</mapper>
