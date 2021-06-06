@@ -4,11 +4,9 @@
 
 ------
 #### FRONT END
-+ JAVASCRIPT
-+ JQUERY
 + HTML5
 + CSS3
-
++ 라이브러리(jQuery, bootstrap, moment.js)
 
 #### DBMS
 + MYSQL
