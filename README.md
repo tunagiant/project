@@ -1,4 +1,4 @@
-#UPDATE 2021.06.06
+### UPDATE 2021.06.06
 게시글 CRUD(HTML FORM), 댓글 CRUD(HTTP API), 페이징기능, 첨부파일기능, MAPPER
 회원가입(스프링시큐리티)기능 구현예정
 
@@ -10,21 +10,21 @@
 + CSS3
 
 
-####DBMS
+#### DBMS
 + MYSQL
 
 
-####BACKEND
+#### BACKEND
 + JAVA
 + THYMELEAF
 
 
-####WEB SERVER
+#### WEB SERVER
 + TOMCAT(SPRING BOOT)
 
 ------
 
-####**java
+#### **java
 + /adaptor
     + GsonLocalDateTimeAdapter		댓글 작성 시간
 
@@ -77,7 +77,7 @@
     + utils/message-redircet.html		오류메세지처리
 
 ------
-####Scheme
+#### Scheme
 >게시글
 ````
 CREATE TABLE tb_board (
