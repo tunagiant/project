@@ -155,16 +155,14 @@
 
         // 2. 댓글등록시 모달레이아웃적용
         function openModal(idx, writer, content) {
-            // 모달오픈
+
             $("#commentModal").modal("toggle");
 
             document.getElementById("modalWriter").value = writer;
             document.getElementById("modalContent").value = content;
 
-            document.getElementById("btnCommentUpdate").setAttribute("onclick", "updateComment("+idx+")");
-            document.getElementById("btnCommentUpdate").setAttribute("onclick", "deleteComment("+idx+")");
-
-
+            document.getElementById("btnCommentUpdate").setAttribute("onclick", "updateComment("+ idx +")");
+            document.getElementById("btnCommentDelete").setAttribute("onclick", "deleteComment("+ idx +")");
         }
 
         // 3. 댓글등록

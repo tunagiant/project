@@ -3,6 +3,7 @@ package com.hotae.controller;
 import com.hotae.constant.Method;
 import com.hotae.domain.AttachDTO;
 import com.hotae.domain.BoardDTO;
+import com.hotae.service.BoardService;
 import com.hotae.service.BoardServiceImpl;
 import com.hotae.util.UiUtils;
 import org.apache.commons.io.FileUtils;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class BoardController extends UiUtils {
 
     @Autowired
-    private BoardServiceImpl boardService;
+    private BoardService boardServiceImpl;
 
 //    1. 등록 & 수정(GET)
     @GetMapping("/board/write.do")
@@ -40,14 +41,14 @@ public class BoardController extends UiUtils {
             model.addAttribute("board", new BoardDTO());
         } else {
 //            수정
-            BoardDTO board = boardService.getBoardDetail(idx);
+            BoardDTO board = boardServiceImpl.getBoardDetail(idx);
             if (board == null || "Y".equals(board.getDeleteYn())) {
                 return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
             }
             model.addAttribute("board", board);
 
 //            게시글 수정 시 이미 업로드되어있던 파일
-            List<AttachDTO> fileList = boardService.getAttachFileList(idx);
+            List<AttachDTO> fileList = boardServiceImpl.getAttachFileList(idx);
             model.addAttribute("fileList", fileList);
         }
 
@@ -61,7 +62,7 @@ public class BoardController extends UiUtils {
         Map pagingParams = getPagingParams(params);
 
         try {
-            boolean isRegistered = boardService.registerBoard(params, files);
+            boolean isRegistered = boardServiceImpl.registerBoard(params, files);
             if (isRegistered == false) {
                 return showMessageWithRedirect("게시글 등록에 실패하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
             }
@@ -79,7 +80,7 @@ public class BoardController extends UiUtils {
     @GetMapping("/board/list.do")
     public String openBoardList(@ModelAttribute("params") BoardDTO params, Model model) {
 
-        List<BoardDTO> boardList = boardService.getBoardList(params);
+        List<BoardDTO> boardList = boardServiceImpl.getBoardList(params);
         model.addAttribute("boardList", boardList);
         return "board/list";
     }
@@ -92,7 +93,7 @@ public class BoardController extends UiUtils {
             return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/list.do", Method.GET, null, model);
         }
 
-        BoardDTO board = boardService.getBoardDetail(idx);
+        BoardDTO board = boardServiceImpl.getBoardDetail(idx);
 
         if (board == null || "Y".equals(board.getDeleteYn())) {
             return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
@@ -100,7 +101,7 @@ public class BoardController extends UiUtils {
 
 //        첨부파일처리
         model.addAttribute("board", board);
-        List<AttachDTO> fileList = boardService.getAttachFileList(idx);
+        List<AttachDTO> fileList = boardServiceImpl.getAttachFileList(idx);
         model.addAttribute("fileList", fileList);
         return "board/view";
     }
@@ -111,7 +112,7 @@ public class BoardController extends UiUtils {
 
         if (idx == null) throw new RuntimeException("올바르지 않은 접근입니다.");
 
-        AttachDTO fileInfo = boardService.getAttachDetail(idx);
+        AttachDTO fileInfo = boardServiceImpl.getAttachDetail(idx);
 
         if (fileInfo == null || "Y".equals(fileInfo.getDeleteYn())) throw new RuntimeException("파일 정보를 찾을 수 없습니다.");
 
@@ -156,7 +157,7 @@ public class BoardController extends UiUtils {
         Map pagingParams = getPagingParams(params);
 
         try {
-            boolean isDeleted = boardService.deleteBoard(idx);
+            boolean isDeleted = boardServiceImpl.deleteBoard(idx);
             if (isDeleted == false) {
                 return showMessageWithRedirect("게시글 삭제에 실패하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
             }

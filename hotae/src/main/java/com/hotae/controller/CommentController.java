@@ -2,6 +2,7 @@ package com.hotae.controller;
 
 import com.hotae.adaptor.GsonLocalDateTimeAdapter;
 import com.hotae.domain.CommentDTO;
+import com.hotae.service.CommentService;
 import com.hotae.service.CommentServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,7 +21,7 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    private CommentServiceImpl commentService;
+    private CommentService commentServiceImpl;
 
     /**
      * comments     등록  @PostMapping
@@ -38,7 +39,7 @@ public class CommentController {
              * 댓글번호를 params에 포함해서 전송하기 때문에 댓글번호 별도저장 안해도됨.
             */
 
-            boolean isRegistered = commentService.registerComment(params);
+            boolean isRegistered = commentServiceImpl.registerComment(params);
 //            메서드실행결과를 result라는 이름으로 JSON객체에 추가해서 리턴
             jsonObj.addProperty("result", isRegistered);
 
@@ -58,7 +59,7 @@ public class CommentController {
 
         JsonObject jsonObj = new JsonObject();
 
-        List commentList = commentService.getCommentList(params);
+        List commentList = commentServiceImpl.getCommentList(params);
 //        댓글이 한개이상 있을 때
         if (CollectionUtils.isEmpty(commentList) == false) {
             Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new GsonLocalDateTimeAdapter()).create();
@@ -78,9 +79,9 @@ public class CommentController {
         JsonObject jsonObj = new JsonObject();
 
         try {
-            boolean isDeleted = commentService.deleteComment(idx);
+            boolean isDeleted = commentServiceImpl.deleteComment(idx);
             jsonObj.addProperty("result", isDeleted);
-
+    
         } catch (DataAccessException e) {
             jsonObj.addProperty("message", "데이터베이스 처리 과정에 문제가 발생하였습니다.");
 
