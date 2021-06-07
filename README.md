@@ -1,14 +1,11 @@
 ### UPDATE 2021.06.06
 게시글 CRUD(HTML FORM), 댓글 CRUD(HTTP API), 페이징기능, 첨부파일기능, MAPPER
-회원가입(스프링시큐리티)기능 구현예정
 
 ------
 #### FRONT END
-+ JAVASCRIPT
-+ JQUERY
 + HTML5
 + CSS3
-
++ 라이브러리(jQuery, bootstrap, moment.js)
 
 #### DBMS
 + MYSQL
@@ -65,7 +62,7 @@
 
 
 
-####**resource
+#### **resource
 + /mapper				mapper 바인딩
 
 + /static				라이브러리, 플러그인 처리
